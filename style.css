@@ -194,16 +194,42 @@ body {
 }
 
 .values-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+}
+
+@media (max-width: 1200px) {
+    .values-list {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 900px) {
+    .values-list {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 680px) {
+    .values-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .values-list {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* Value Items */
 .value-item {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    padding: 15px 20px;
+    justify-content: center;
+    padding: 12px 8px;
     background: #f8f9fa;
     border: 2px solid transparent;
     border-radius: 12px;
@@ -211,6 +237,8 @@ body {
     transition: all 0.3s ease;
     position: relative;
     user-select: none;
+    min-height: 80px;
+    text-align: center;
 }
 
 .value-item:hover {
@@ -247,29 +275,35 @@ body {
 
 .value-position {
     font-weight: bold;
-    font-size: 1.2rem;
+    font-size: 0.9rem;
     color: #667eea;
-    min-width: 40px;
-    text-align: center;
-    margin-right: 15px;
+    margin-bottom: 6px;
+    background: rgba(102, 126, 234, 0.1);
+    padding: 2px 8px;
+    border-radius: 10px;
+    min-width: 24px;
 }
 
 .value-content {
     flex: 1;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
+    justify-content: center;
+    gap: 8px;
 }
 
 .value-name {
-    font-size: 1.1rem;
+    font-size: 0.85rem;
     font-weight: 600;
     color: #333;
+    line-height: 1.2;
+    text-align: center;
 }
 
 .value-actions {
     display: flex;
-    gap: 5px;
+    gap: 3px;
     opacity: 0;
     transition: opacity 0.3s ease;
 }
@@ -300,8 +334,9 @@ body {
 
 .drag-handle {
     color: #adb5bd;
-    margin-left: 15px;
     cursor: grab;
+    margin-top: 4px;
+    font-size: 0.8rem;
 }
 
 .value-item.dragging .drag-handle {
@@ -412,25 +447,21 @@ body {
 
 @media (max-width: 480px) {
     .value-item {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 10px;
+        min-height: 100px;
+        padding: 15px 10px;
+    }
+    
+    .value-name {
+        font-size: 0.9rem;
     }
     
     .value-position {
-        align-self: flex-start;
-        margin-right: 0;
-        margin-bottom: 5px;
-    }
-    
-    .value-content {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 10px;
+        font-size: 1rem;
     }
     
     .value-actions {
         justify-content: center;
+        opacity: 1;
     }
 }
 
@@ -438,18 +469,21 @@ body {
 .value-item.drag-over {
     border-color: #667eea;
     background: #e7f3ff;
+    transform: scale(1.05);
 }
 
 .values-list.dragging .value-item:not(.dragging) {
-    transition: transform 0.3s ease;
+    transition: all 0.3s ease;
 }
 
 .values-list.dragging .value-item.shift-up {
-    transform: translateY(-60px);
+    transform: scale(0.95);
+    opacity: 0.7;
 }
 
 .values-list.dragging .value-item.shift-down {
-    transform: translateY(60px);
+    transform: scale(0.95);
+    opacity: 0.7;
 }
 
 /* Accessibility */
