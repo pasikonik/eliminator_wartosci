@@ -344,8 +344,10 @@ body {
 
 @media (max-width: 480px) {
     .value-item {
-        min-height: 80px;
-        padding: 10px 8px;
+        min-height: 40px;
+        padding: 5px 8px;
+        flex-direction: row;
+        justify-content: space-around;
     }
     
     .value-name {
