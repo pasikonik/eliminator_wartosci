@@ -13,52 +13,25 @@ createApp({
         // Initial values from the requirements
         const initialValues = [
             'Miłość', 'Balans', 'Energia', 'Akceptacja', 'Harmonia', 'Satysfakcja',
-            'Zaufanie', 'Intuicja', 'Radość', 'Wiara', 'Motywacja', 'Szczęście',
+            'Zaufanie', 'Intuicja', 'Radość', 'Religia', 'Motywacja', 'Szczęście',
             'Zdrowie', 'Pasja', 'Bogactwo', 'Piękno', 'Niezależność', 'Dostatek',
             'Intymność', 'Elastyczność', 'Sukces', 'Spokój', 'Wolność', 'Perfekcjonizm',
             'Szczerość', 'Zaangażowanie', 'Mądrość', 'Stabilność Finansowa', 'Wdzięczność',
             'Wygoda', 'Rozwój osobisty', 'Wsparcie', 'Dobra zabawa', 'Wykształcenie',
             'Wrażliwość', 'Humor', 'Kreatywność', 'Wyobraźnia', 'Marzenia', 'Bezpieczeństwo',
-            'Komfort', 'Transcendencja', 'Pewność', 'Sprawiedliwość', 'Lojalność',
+            'Komfort', 'Pewność', 'Sprawiedliwość', 'Lojalność',
             'Duma', 'Przygoda', 'Ryzyko', 'Wyzwania', 'Autentyczność', 'Odwaga',
-            'Oryginalność', 'Szacunek', 'Otwartość', 'Pokój', 'Uczciwość',
-            'Uczenie się', 'Duchowość', 'Fair-play', 'Prawda', 'Inicjatywa',
-            'Innowacyjność', 'Przyjaźń', 'Jakość', 'Współpraca', 'Siła',
-            'Skuteczność', 'Spełnienie', 'Zręczność', 'Odpowiedzialność'
+            'Oryginalność', 'Szacunek', 'Otwartość', 'Pokój',
+            'Wiedza', 'Duchowość', 'Uczciwość', 'Prawda', 'Inicjatywa',
+            'Innowacyjność', 'Przyjaźń', 'Współpraca',
+            'Skuteczność', 'Spełnienie', 'Odpowiedzialność',
+            'Rodzina', 'Władza', 'Praca', 'Tolerancja', 'Tradycja'
         ];
 
-        // Remove duplicates and take first 40
-        const uniqueValues = [...new Set(initialValues)].slice(0, 40);
-
-        // Computed properties
-        const progress = computed(() => {
-            if (values.value.length === 0) return 0;
-            
-            // Calculate progress based on how many values have been "properly positioned"
-            // We consider a value properly positioned if it has been moved from its initial position
-            let movedValues = 0;
-            for (let i = 0; i < values.value.length; i++) {
-                const value = values.value[i];
-                const initialIndex = uniqueValues.indexOf(value.name);
-                if (i !== initialIndex) {
-                    movedValues++;
-                }
-            }
-            
-            // Additional progress for having top 7 values in reasonable positions
-            let topValuesBonus = 0;
-            for (let i = 0; i < Math.min(7, values.value.length); i++) {
-                if (i !== uniqueValues.indexOf(values.value[i].name)) {
-                    topValuesBonus += 2; // Extra weight for top positions
-                }
-            }
-            
-            return Math.min(100, (movedValues * 1.5 + topValuesBonus) / values.value.length * 100);
-        });
 
         // Initialize values
         const initializeValues = () => {
-            values.value = uniqueValues.map((name, index) => ({
+            values.value = initialValues.map((name, index) => ({
                 id: `value_${index}`,
                 name,
                 originalIndex: index
@@ -226,6 +199,35 @@ createApp({
             }
         };
 
+        // Copy to Clipboard
+        const copyToClipboard = async () => {
+            try {
+                const listContent = values.value
+                    .map((value, index) => `${index + 1}. ${value.name}`)
+                    .join('\n');
+                
+                await navigator.clipboard.writeText(listContent);
+                showToast('Lista została skopiowana do schowka', 'success');
+            } catch (error) {
+                console.error('Copy error:', error);
+                // Fallback for older browsers
+                try {
+                    const textArea = document.createElement('textarea');
+                    textArea.value = values.value
+                        .map((value, index) => `${index + 1}. ${value.name}`)
+                        .join('\n');
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    showToast('Lista została skopiowana do schowka', 'success');
+                } catch (fallbackError) {
+                    console.error('Fallback copy error:', fallbackError);
+                    showToast('Błąd podczas kopiowania do schowka', 'error');
+                }
+            }
+        };
+
         // CSV Import
         const importCSV = (event) => {
             const file = event.target.files[0];
@@ -316,12 +318,12 @@ createApp({
             draggingIndex,
             toasts,
             valuesList,
-            progress,
             dragStart,
             dragOver,
             dragEnd,
             drop,
             exportCSV,
+            copyToClipboard,
             importCSV,
             resetValues,
             shuffleValues,
