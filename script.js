@@ -275,24 +275,20 @@ createApp({
 
         // Utility functions
         const resetValues = () => {
-            if (confirm('Czy na pewno chcesz zresetować listę do początkowych wartości?')) {
-                initializeValues();
-                saveToStorage();
-                showToast('Lista została zresetowana', 'info');
-            }
+            initializeValues();
+            saveToStorage();
+            showToast('Lista została zresetowana', 'info');
         };
 
         const shuffleValues = () => {
-            if (confirm('Czy na pewno chcesz wylosować kolejność wartości?')) {
-                const shuffled = [...values.value];
-                for (let i = shuffled.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-                }
-                values.value = shuffled;
-                saveToStorage();
-                showToast('Lista została wylosowana', 'info');
+            const shuffled = [...values.value];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
             }
+            values.value = shuffled;
+            saveToStorage();
+            showToast('Lista została wylosowana', 'info');
         };
 
         const getValueStyle = (index) => {
