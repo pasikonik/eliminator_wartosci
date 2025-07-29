@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eliminacja Wartości - Ranking Życiowych Priorytetów</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div id="app">
+        <div class="container">
+            <!-- Header -->
+            <header class="header">
+                <h1>
+                    <i class="fas fa-sort-amount-up"></i>
+                    Eliminacja Wartości
+                </h1>
+                <p class="subtitle">Posortuj 40 wartości życiowych od najważniejszych</p>
+            </header>
+
+            <!-- Progress Bar -->
+            <div class="progress-section">
+                <div class="progress-info">
+                    <span>Postęp sortowania</span>
+                    <span>{{ Math.round(progress) }}%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" :style="{ width: progress + '%' }"></div>
+                </div>
+                <p class="progress-description">
+                    Cel: Znajdź 7 najważniejszych wartości w swoim życiu
+                </p>
+            </div>
+
+            <!-- Controls -->
+            <div class="controls">
+                <div class="control-group">
+                    <button @click="exportCSV" class="btn btn-primary">
+                        <i class="fas fa-download"></i>
+                        Eksportuj CSV
+                    </button>
+                    <label class="btn btn-secondary">
+                        <i class="fas fa-upload"></i>
+                        Importuj CSV
+                        <input type="file" @change="importCSV" accept=".csv" style="display: none;">
+                    </label>
+                </div>
+                <div class="control-group">
+                    <button @click="resetValues" class="btn btn-outline">
+                        <i class="fas fa-undo"></i>
+                        Reset
+                    </button>
+                    <button @click="shuffleValues" class="btn btn-outline">
+                        <i class="fas fa-random"></i>
+                        Losuj
+                    </button>
+                </div>
+            </div>
+
+            <!-- Instructions -->
+            <div class="instructions">
+                <p>
+                    <i class="fas fa-info-circle"></i>
+                    <strong>Instrukcje:</strong> Przeciągnij wartości aby je posortować. Możesz również używać klawiatury (Tab + strzałki + Spacja).
+                    Top 7 wartości będzie podświetlonych żółtym gradientem.
+                </p>
+            </div>
+
+            <!-- Values List -->
+            <div class="values-container">
+                <div class="values-list" ref="valuesList">
+                    <div
+                        v-for="(value, index) in values"
+                        :key="value.id"
+                        :class="[
+                            'value-item',
+                            { 'dragging': draggingIndex === index },
+                            { 'top-value': index < 7 },
+                            `top-${index + 1}`
+                        ]"
+                        :style="getValueStyle(index)"
+                        :draggable="true"
+                        :tabindex="0"
+                        @dragstart="dragStart(index, $event)"
+                        @dragover="dragOver(index, $event)"
+                        @dragend="dragEnd"
+                        @drop="drop(index, $event)"
+                        @keydown="handleKeydown(index, $event)"
+                        @focus="focusedIndex = index"
+                        @blur="focusedIndex = null"
+                    >
+                        <div class="value-position">{{ index + 1 }}</div>
+                        <div class="value-content">
+                            <div class="value-name">{{ value.name }}</div>
+                            <div class="value-actions">
+                                <button 
+                                    @click="moveUp(index)"
+                                    :disabled="index === 0"
+                                    class="action-btn"
+                                    title="Przenieś w górę"
+                                >
+                                    <i class="fas fa-chevron-up"></i>
+                                </button>
+                                <button 
+                                    @click="moveDown(index)"
+                                    :disabled="index === values.length - 1"
+                                    class="action-btn"
+                                    title="Przenieś w dół"
+                                >
+                                    <i class="fas fa-chevron-down"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="drag-handle">
+                            <i class="fas fa-grip-vertical"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <footer class="footer">
+                <p>Ostatnie zmiany zapisane automatycznie w pamięci przeglądarki</p>
+            </footer>
+        </div>
+
+        <!-- Toast Notifications -->
+        <div class="toast-container">
+            <div 
+                v-for="toast in toasts" 
+                :key="toast.id"
+                :class="['toast', `toast-${toast.type}`]"
+            >
+                <i :class="getToastIcon(toast.type)"></i>
+                {{ toast.message }}
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
