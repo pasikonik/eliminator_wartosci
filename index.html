@@ -63,8 +63,7 @@
             <div class="instructions">
                 <p>
                     <i class="fas fa-info-circle"></i>
-                    <strong>Instrukcje:</strong> Przeciągnij wartości aby je posortować. Możesz również używać klawiatury (Tab + strzałki + Spacja).
-                    Top 7 wartości będzie podświetlonych żółtym gradientem.
+                    <strong>Instrukcje:</strong> Przeciągnij wartości aby je posortować. Wartości nieprzemieszczone oznaczone są czerwoną kropką. Top 7 wartości będzie podświetlonych żółtym gradientem. Na urządzeniach mobilnych układ zmienia się na listę.
                 </p>
             </div>
 
@@ -78,6 +77,7 @@
                             'value-item',
                             { 'dragging': draggingIndex === index },
                             { 'top-value': index < 7 },
+                            { 'unmoved': !isValueMoved(index) },
                             `top-${index + 1}`
                         ]"
                         :style="getValueStyle(index)"
