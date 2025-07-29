@@ -75,40 +75,13 @@
                         ]"
                         :style="getValueStyle(index)"
                         :draggable="true"
-                        :tabindex="0"
                         @dragstart="dragStart(index, $event)"
                         @dragover="dragOver(index, $event)"
                         @dragend="dragEnd"
                         @drop="drop(index, $event)"
-                        @keydown="handleKeydown(index, $event)"
-                        @focus="focusedIndex = index"
-                        @blur="focusedIndex = null"
                     >
                         <div class="value-position">{{ index + 1 }}</div>
-                        <div class="value-content">
-                            <div class="value-name">{{ value.name }}</div>
-                            <div class="value-actions">
-                                <button 
-                                    @click="moveUp(index)"
-                                    :disabled="index === 0"
-                                    class="action-btn"
-                                    title="Przenieś w górę"
-                                >
-                                    <i class="fas fa-chevron-up"></i>
-                                </button>
-                                <button 
-                                    @click="moveDown(index)"
-                                    :disabled="index === values.length - 1"
-                                    class="action-btn"
-                                    title="Przenieś w dół"
-                                >
-                                    <i class="fas fa-chevron-down"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="drag-handle">
-                            <i class="fas fa-grip-vertical"></i>
-                        </div>
+                        <div class="value-name">{{ value.name }}</div>
                     </div>
                 </div>
             </div>

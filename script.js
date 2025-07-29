@@ -6,7 +6,7 @@ createApp({
         const values = ref([]);
         const draggingIndex = ref(null);
         const dragOverIndex = ref(null);
-        const focusedIndex = ref(null);
+
         const toasts = ref([]);
         const valuesList = ref(null);
 
@@ -119,24 +119,7 @@ createApp({
             return icons[type] || icons.info;
         };
 
-        // Movement functions
-        const moveUp = (index) => {
-            if (index > 0) {
-                const newValues = [...values.value];
-                [newValues[index], newValues[index - 1]] = [newValues[index - 1], newValues[index]];
-                values.value = newValues;
-                saveToStorage();
-            }
-        };
 
-        const moveDown = (index) => {
-            if (index < values.value.length - 1) {
-                const newValues = [...values.value];
-                [newValues[index], newValues[index + 1]] = [newValues[index + 1], newValues[index]];
-                values.value = newValues;
-                saveToStorage();
-            }
-        };
 
         const moveToPosition = (fromIndex, toIndex) => {
             if (fromIndex === toIndex) return;
@@ -215,51 +198,7 @@ createApp({
             }
         };
 
-        // Keyboard navigation
-        const handleKeydown = (index, event) => {
-            switch (event.key) {
-                case 'ArrowUp':
-                    event.preventDefault();
-                    if (event.ctrlKey || event.metaKey) {
-                        moveUp(index);
-                    } else if (index > 0) {
-                        const prevElement = event.target.parentElement.children[index - 1];
-                        prevElement?.focus();
-                    }
-                    break;
-                    
-                case 'ArrowDown':
-                    event.preventDefault();
-                    if (event.ctrlKey || event.metaKey) {
-                        moveDown(index);
-                    } else if (index < values.value.length - 1) {
-                        const nextElement = event.target.parentElement.children[index + 1];
-                        nextElement?.focus();
-                    }
-                    break;
-                    
-                case ' ':
-                case 'Enter':
-                    event.preventDefault();
-                    // Toggle between moving up or down (space cycles through positions)
-                    if (event.shiftKey) {
-                        moveDown(index);
-                    } else {
-                        moveUp(index);
-                    }
-                    break;
-                    
-                case 'Home':
-                    event.preventDefault();
-                    moveToPosition(index, 0);
-                    break;
-                    
-                case 'End':
-                    event.preventDefault();
-                    moveToPosition(index, values.value.length - 1);
-                    break;
-            }
-        };
+
 
         // CSV Export
         const exportCSV = () => {
@@ -370,68 +309,25 @@ createApp({
             loadFromStorage();
         });
 
-        // Touch support for mobile
-        const addTouchSupport = () => {
-            let touchStartY = 0;
-            let touchElement = null;
 
-            const handleTouchStart = (e, index) => {
-                touchStartY = e.touches[0].clientY;
-                touchElement = index;
-            };
-
-            const handleTouchMove = (e) => {
-                e.preventDefault();
-            };
-
-            const handleTouchEnd = (e, index) => {
-                if (touchElement === null) return;
-                
-                const touchEndY = e.changedTouches[0].clientY;
-                const diff = touchStartY - touchEndY;
-                
-                if (Math.abs(diff) > 50) { // Minimum swipe distance
-                    if (diff > 0) {
-                        moveUp(index);
-                    } else {
-                        moveDown(index);
-                    }
-                }
-                
-                touchElement = null;
-            };
-
-            return {
-                handleTouchStart,
-                handleTouchMove,
-                handleTouchEnd
-            };
-        };
-
-        const touchHandlers = addTouchSupport();
 
         return {
             values,
             draggingIndex,
-            focusedIndex,
             toasts,
             valuesList,
             progress,
-            moveUp,
-            moveDown,
             dragStart,
             dragOver,
             dragEnd,
             drop,
-            handleKeydown,
             exportCSV,
             importCSV,
             resetValues,
             shuffleValues,
             getValueStyle,
             getToastIcon,
-            showToast,
-            ...touchHandlers
+            showToast
         };
     }
 }).mount('#app');

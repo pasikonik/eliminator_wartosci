@@ -229,15 +229,15 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 12px 8px;
+    padding: 8px 6px;
     background: #f8f9fa;
     border: 2px solid transparent;
-    border-radius: 12px;
+    border-radius: 8px;
     cursor: grab;
     transition: all 0.3s ease;
     position: relative;
     user-select: none;
-    min-height: 80px;
+    min-height: 60px;
     text-align: center;
 }
 
@@ -275,73 +275,24 @@ body {
 
 .value-position {
     font-weight: bold;
-    font-size: 0.9rem;
+    font-size: 0.7rem;
     color: #667eea;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
     background: rgba(102, 126, 234, 0.1);
-    padding: 2px 8px;
-    border-radius: 10px;
-    min-width: 24px;
-}
-
-.value-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
+    padding: 1px 6px;
+    border-radius: 8px;
+    min-width: 18px;
 }
 
 .value-name {
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     font-weight: 600;
     color: #333;
-    line-height: 1.2;
+    line-height: 1.1;
     text-align: center;
 }
 
-.value-actions {
-    display: flex;
-    gap: 3px;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
 
-.value-item:hover .value-actions {
-    opacity: 1;
-}
-
-.action-btn {
-    background: none;
-    border: none;
-    color: #667eea;
-    cursor: pointer;
-    padding: 5px;
-    border-radius: 4px;
-    transition: all 0.2s ease;
-}
-
-.action-btn:hover:not(:disabled) {
-    background: #667eea;
-    color: white;
-}
-
-.action-btn:disabled {
-    color: #ccc;
-    cursor: not-allowed;
-}
-
-.drag-handle {
-    color: #adb5bd;
-    cursor: grab;
-    margin-top: 4px;
-    font-size: 0.8rem;
-}
-
-.value-item.dragging .drag-handle {
-    cursor: grabbing;
-}
 
 /* Footer */
 .footer {
@@ -447,21 +398,16 @@ body {
 
 @media (max-width: 480px) {
     .value-item {
-        min-height: 100px;
-        padding: 15px 10px;
+        min-height: 80px;
+        padding: 10px 8px;
     }
     
     .value-name {
-        font-size: 0.9rem;
+        font-size: 0.8rem;
     }
     
     .value-position {
-        font-size: 1rem;
-    }
-    
-    .value-actions {
-        justify-content: center;
-        opacity: 1;
+        font-size: 0.8rem;
     }
 }
 
