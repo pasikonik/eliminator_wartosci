@@ -56,13 +56,6 @@ createApp({
             return Math.min(100, (movedValues * 1.5 + topValuesBonus) / values.value.length * 100);
         });
 
-        // Check if a value has been moved from its original position
-        const isValueMoved = (index) => {
-            const value = values.value[index];
-            const initialIndex = uniqueValues.indexOf(value.name);
-            return index !== initialIndex;
-        };
-
         // Initialize values
         const initializeValues = () => {
             values.value = uniqueValues.map((name, index) => ({
@@ -438,7 +431,6 @@ createApp({
             getValueStyle,
             getToastIcon,
             showToast,
-            isValueMoved,
             ...touchHandlers
         };
     }
